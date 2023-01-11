@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="shortcut icon" href="#">
+  <style>
+    body{
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    .human {
+      margin-top: 600px;
+      background-color: bisque;
+      width: 100%;
+      height: 300px;
+    }
+    .human>.img{
+      position: absolute;
+      left: 100px;
+      top: 700px;
+      overflow: hidden;
+      width: 200px;
+      height: 200px;
+      background: url(./images/승규.png) no-repeat center center;
+      background-size:cover;
+    }
+    .stage{
+      background-color: aqua;
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      z-index: -99;
+      left: 60px;
+      top: 100px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>오디오 재생</h1>
+  <div>
+    <audio src="./audio/2.mp3" id="hi" loop></audio>
+  </div>
+  <div>
+    <div class="human">
+      <div class="img"></div>
+    </div>
+    <div class="stage"></div>
+  </div>
+
+  <script src="./script/jquery-3.6.1.js"></script>
+  <script src="./script/jquery-ui.js"></script>
+  <script>
+    let start = 0;
+    let end = 0;
+    // let pos={};
+    let pos={x : $('.img').offset().left, y : $('.img').offset().top};
+    const audio = document.querySelector('#hi');
+    const stageLeft = $('.stage').offset().left;
+    const stageWidth = $('.stage').width();
+    const stageRight = stageLeft + stageWidth;
+    const stageTop  = $('.stage').offset().top;
+    const stageHeight = $('.stage').height();
+    const stageBottom = stageTop + stageHeight;
+
+    function Init(){
+      audio.volume = 0;
+    }
+    
+    Init();
+    $('.human').on('mouseup',function(){
+      audio.play();
+    })
+    $('.img').draggable({
+      start:function(event){
+        // pos = posFun( $(this).offset().left, $(this).offset().top )
+        // console.log('start');
+      },
+      drag:function(event){
+      },
+      stop:function(event){
+        imgLeft = $(this).offset().left;
+        imgWidth = $(this).width();
+        imgRight = imgLeft + imgWidth;
+        imgTop = $(this).offset().top;
+        imgHeight = $(this).height();
+        imgBottom = imgTop + imgHeight;
+
+        console.log(stageRight);
+        console.log(imgRight);
+
+        if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
+          console.log('good');
+          $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
+          audio.volume = 1;
+        }else{
+          $(this).css({'left' : pos.x, 'top' : pos.y})
+          console.log('no');
+          audio.volume = 0;
+        }
+      }
+    })
+   
+    function posFun( x, y ){
+		  return { x, y };
+  	}
+  </script>
+</body>
+</html>
