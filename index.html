@@ -7,78 +7,136 @@
   <title>Document</title>
   <link rel="stylesheet" href="./styles/reset.css">
   <link rel="shortcut icon" href="#">
-  <style>
-    body{
-      width: 100vw;
-      overflow-x: hidden;
-    }
-    .human {
-      margin-top: 600px;
-      background-color: bisque;
-      width: 100%;
-      height: 300px;
-    }
-    .human>.img{
-      position: absolute;
-      left: 100px;
-      top: 700px;
-      overflow: hidden;
-      width: 200px;
-      height: 200px;
-      background: url(./images/승규.png) no-repeat center center;
-      background-size:cover;
-    }
-    .stage{
-      background-color: aqua;
-      width: 300px;
-      height: 300px;
-      position: absolute;
-      z-index: -99;
-      left: 60px;
-      top: 100px;
-    }
-
-  </style>
+  <link rel="stylesheet" href="./styles/style.css">
+  <style></style>
 </head>
 <body>
+  <!-- 
+    1. 스테이지와 대기장소가 하나로 묶여 있어야 함
+    2. 악기를 스테이지로 옮기면 볼륨이 조절되는 형태로 노래가 나옴
+    3. bpm을 초당으로 나올 수 있게 계산하기(애니메이션과 맞춤)
+    4. 드래그 하는 동안 애니메이션 필요
+   -->
   <h1>오디오 재생</h1>
-  <div>
-    <audio src="./audio/2.mp3" id="hi" loop></audio>
+  <div class="audio-file">
+    <audio src="./audio/piano.wav" id="piano" loop></audio>
+    <audio src="./audio/drum.wav" id="drum" loop></audio>
+    <audio src="./audio/bass.wav" id="bass" loop></audio>
+    <audio src="./audio/pad.wav" id="pad" loop></audio>
+    <audio src="./audio/perc.wav" id="perc" loop></audio>
   </div>
-  <div>
-    <div class="human">
-      <div class="img"></div>
+  <div class="main">
+    <div class="piano">
+      <div class="stage"></div>
+      <div class="waiting">
+        <div class="piano-item">
+          <div class="img"></div>
+        </div>
+      </div>
     </div>
-    <div class="stage"></div>
+    <div class="drum">
+      <div class="stage"></div>
+      <div class="waiting">
+        <div class="drum-item">
+          <div class="img"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bass">
+      <div class="stage"></div>
+      <div class="waiting">
+        <div class="bass-item">
+          <div class="img"></div>
+        </div>
+      </div>
+    </div>
+    <div class="pad">
+      <div class="stage"></div>
+      <div class="waiting">
+        <div class="pad-item">
+          <div class="img"></div>
+        </div>
+      </div>
+    </div>
+    <div class="perc">
+      <div class="stage"></div>
+      <div class="waiting">
+        <div class="perc-item">
+          <div class="img"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="./script/jquery-3.6.1.js"></script>
   <script src="./script/jquery-ui.js"></script>
   <script>
-    let start = 0;
-    let end = 0;
-    // let pos={};
-    let pos={x : $('.img').offset().left, y : $('.img').offset().top};
-    const audio = document.querySelector('#hi');
-    const stageLeft = $('.stage').offset().left;
-    const stageWidth = $('.stage').width();
-    const stageRight = stageLeft + stageWidth;
-    const stageTop  = $('.stage').offset().top;
-    const stageHeight = $('.stage').height();
-    const stageBottom = stageTop + stageHeight;
+    let pPos={x : $('.piano-item > .img').offset().left, y : $('.piano-item > .img').offset().top};
+    let dPos={x : $('.drum-item > .img').offset().left, y : $('.drum-item > .img').offset().top};
+    let bPos={x : $('.bass-item > .img').offset().left, y : $('.bass-item > .img').offset().top};
+    let padPos={x : $('.pad-item > .img').offset().left, y : $('.pad-item > .img').offset().top};
+    let percPos={x : $('.perc-item > .img').offset().left, y : $('.perc-item > .img').offset().top};
+    let stageLeft;
+    let stageWidth;
+    let stageRight;
+    let stageTop;
+    let stageHeight;
+    let stageBottom;
 
-    function Init(){
-      audio.volume = 0;
-    }
+    const audios = document.querySelectorAll('audio');
+    const stages = document.querySelectorAll('.stage');
     
+    function Init(){
+      audios.forEach(audio => {
+        audio.volume = 0;
+      });
+    }
     Init();
-    $('.human').on('mouseup',function(){
-      audio.play();
+    
+    // 노래 재생되기
+    $('.main').on('mouseup',function(){
+      audios.forEach(audio => {
+        audio.play();
+      });
     })
-    $('.img').draggable({
+    
+    // piano 이미지 움직이기
+    $('.piano-item >.img').draggable({
       start:function(event){
-        // pos = posFun( $(this).offset().left, $(this).offset().top )
-        // console.log('start');
+      },
+      drag:function(event){
+      },
+      stop:function(event){
+        imgLeft = $(this).offset().left;
+        imgWidth = $(this).width();
+        imgRight = imgLeft + imgWidth;
+        imgTop = $(this).offset().top;
+        imgHeight = $(this).height();
+        imgBottom = imgTop + imgHeight;
+        
+        stageLeft = stages[0].offsetLeft;
+        stageWidth = stages[0].offsetWidth;
+        stageRight = stageLeft + stageWidth;
+        stageTop = stages[0].offsetTop;
+        stageHeight = stages[0].offsetHeight;
+        stageBottom = stageTop + stageHeight;
+        console.log(stages[0].offsetLeft)
+        
+        if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
+          console.log('good');
+          $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
+          console.log(stageTop + ((stageHeight - imgHeight) / 2))
+          audios[0].volume = 1;
+        }else{
+          $(this).css({'left' : pPos.x, 'top' : pPos.y})
+          console.log('no');
+          audios[0].volume = 0;
+        }
+      }
+    })
+    // drum 이미지 움직이기
+    $('.drum-item >.img').draggable({
+      start:function(event){
       },
       drag:function(event){
       },
@@ -90,24 +148,120 @@
         imgHeight = $(this).height();
         imgBottom = imgTop + imgHeight;
 
-        console.log(stageRight);
-        console.log(imgRight);
+        stageLeft = stages[1].offsetLeft;
+        stageWidth = stages[1].offsetWidth;
+        stageRight = stageLeft + stageWidth;
+        stageTop = stages[1].offsetTop;
+        stageHeight = stages[1].offsetHeight;
+        stageBottom = stageTop + stageHeight;
 
         if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
           console.log('good');
           $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
-          audio.volume = 1;
+          audios[1].volume = 1;
         }else{
-          $(this).css({'left' : pos.x, 'top' : pos.y})
+          $(this).css({'left' : dPos.x, 'top' : dPos.y})
           console.log('no');
-          audio.volume = 0;
+          audios[1].volume = 0;
         }
       }
     })
-   
-    function posFun( x, y ){
-		  return { x, y };
-  	}
+    // bass 이미지 움직이기
+    $('.bass-item >.img').draggable({
+      start:function(event){
+      },
+      drag:function(event){
+      },
+      stop:function(event){
+        imgLeft = $(this).offset().left;
+        imgWidth = $(this).width();
+        imgRight = imgLeft + imgWidth;
+        imgTop = $(this).offset().top;
+        imgHeight = $(this).height();
+        imgBottom = imgTop + imgHeight;
+
+        stageLeft = stages[2].offsetLeft;
+        stageWidth = stages[2].offsetWidth;
+        stageRight = stageLeft + stageWidth;
+        stageTop = stages[2].offsetTop;
+        stageHeight = stages[2].offsetHeight;
+        stageBottom = stageTop + stageHeight;
+
+        if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
+          console.log('good');
+          $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
+          audios[2].volume = 1;
+        }else{
+          $(this).css({'left' : bPos.x, 'top' : bPos.y})
+          console.log('no');
+          audios[2].volume = 0;
+        }
+      }
+    })
+    // pad 이미지 움직이기
+    $('.pad-item >.img').draggable({
+      start:function(event){
+      },
+      drag:function(event){
+      },
+      stop:function(event){
+        imgLeft = $(this).offset().left;
+        imgWidth = $(this).width();
+        imgRight = imgLeft + imgWidth;
+        imgTop = $(this).offset().top;
+        imgHeight = $(this).height();
+        imgBottom = imgTop + imgHeight;
+
+        stageLeft = stages[3].offsetLeft;
+        stageWidth = stages[3].offsetWidth;
+        stageRight = stageLeft + stageWidth;
+        stageTop = stages[3].offsetTop;
+        stageHeight = stages[3].offsetHeight;
+        stageBottom = stageTop + stageHeight;
+
+        if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
+          console.log('good');
+          $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
+          audios[3].volume = 0.3;
+        }else{
+          $(this).css({'left' : padPos.x, 'top' : padPos.y})
+          console.log('no');
+          audios[3].volume = 0;
+        }
+      }
+    })
+    // perc 이미지 움직이기
+    $('.perc-item >.img').draggable({
+      start:function(event){
+      },
+      drag:function(event){
+      },
+      stop:function(event){
+        imgLeft = $(this).offset().left;
+        imgWidth = $(this).width();
+        imgRight = imgLeft + imgWidth;
+        imgTop = $(this).offset().top;
+        imgHeight = $(this).height();
+        imgBottom = imgTop + imgHeight;
+
+        stageLeft = stages[4].offsetLeft;
+        stageWidth = stages[4].offsetWidth;
+        stageRight = stageLeft + stageWidth;
+        stageTop = stages[4].offsetTop;
+        stageHeight = stages[4].offsetHeight;
+        stageBottom = stageTop + stageHeight;
+
+        if(stageRight >= imgRight && imgLeft >= stageLeft && imgTop >= stageTop && imgBottom <= stageBottom){
+          console.log('good');
+          $(this).css({'left' : stageLeft + ((stageWidth - imgWidth) / 2), 'top': stageTop + ((stageHeight - imgHeight) / 2)});
+          audios[4].volume = 0.3;
+        }else{
+          $(this).css({'left' : percPos.x, 'top' : percPos.y})
+          console.log('no');
+          audios[4].volume = 0;
+        }
+      }
+    })
   </script>
 </body>
 </html>

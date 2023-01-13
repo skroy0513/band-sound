@@ -1,0 +1,111 @@
+body{
+  width: 100vw;
+  overflow-x: hidden;
+}
+.main {
+  display: flex;
+} 
+.bass {
+  width: 300px;
+  height: 900px;
+}
+.piano {
+  width: 300px;
+  height: 900px;
+}
+.piano-item >.img{
+  position: absolute;
+  left: 37px;
+  top: 686px;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  background: url(../images/piano.png) no-repeat center center;
+  background-size:cover;
+}
+.drum-item >.img{
+  position: absolute;
+  left: 337px;
+  top: 686px;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  background: url(../images/drum.png) no-repeat center center;
+  background-size:cover;
+}
+.bass-item >.img{
+  position: absolute;
+  left: 637px;
+  top: 686px;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  background: url(../images/bass.png) no-repeat center center;
+  background-size:contain;
+}
+.pad-item >.img{
+  position: absolute;
+  left: 937px;
+  top: 686px;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  background: url(../images/pad.png) no-repeat center top;
+  background-size:cover;
+}
+.perc-item >.img{
+  position: absolute;
+  left: 1237px;
+  top: 686px;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  background: url(../images/perc.png) no-repeat center center;
+  background-size:contain;
+}
+
+.piano > .stage{
+  background-color: purple;
+  width: 300px;
+  height: 300px;
+  /* position: absolute; */
+  z-index: -99;
+  left: 60px;
+  top: 100px;
+}
+.drum > .stage{
+  background-color: greenyellow;
+  width: 300px;
+  height: 300px;
+  /* position: absolute; */
+  z-index: -99;
+  left: 60px;
+  top: 100px;
+}
+.bass > .stage{
+  background-color: aqua;
+  width: 300px;
+  height: 300px;
+  /* position: absolute; */
+  /* z-index: -99; */
+  /* left: 60px; */
+  /* top: 100px; */
+}
+.pad > .stage{
+  background-color: yellow;
+  width: 300px;
+  height: 300px;
+  /* position: absolute; */
+  z-index: -99;
+  left: 60px;
+  top: 100px;
+}
+.perc > .stage{
+  background-color: royalblue;
+  width: 300px;
+  height: 300px;
+  /* position: absolute; */
+  z-index: -99;
+  left: 60px;
+  top: 100px;
+}
