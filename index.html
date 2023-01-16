@@ -95,9 +95,14 @@
     
     // 노래 재생되기
     $('.main').on('mouseup',function(){
-      audios.forEach(audio => {
-        audio.play();
-      });
+      // audios.forEach(audio => {
+      //   audio.play();
+      // });
+      document.querySelector('#piano').play()
+      document.querySelector('#drum').play()
+      document.querySelector('#bass').play()
+      document.querySelector('#perc').play()
+      document.querySelector('#pad').play()
     })
     
     // piano 이미지 움직이기
