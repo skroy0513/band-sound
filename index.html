@@ -86,15 +86,15 @@
     const audios = document.querySelectorAll('audio');
     const stages = document.querySelectorAll('.stage');
     
-    function Init(){
-      audios.forEach(audio => {
-        audio.volume = 0;
-      });
-    }
-    Init();
+    // function Init(){
+    //   audios.forEach(audio => {
+    //     audio.volume = 0;
+    //   });
+    // }
+    // Init();
     
     // 노래 재생되기
-    $('.main').on('mouseup',function(){
+    $('.main').on('mousedown',function(){
       // audios.forEach(audio => {
       //   audio.play();
       // });
@@ -103,6 +103,7 @@
       document.querySelector('#bass').play()
       document.querySelector('#perc').play()
       document.querySelector('#pad').play()
+      console.log("let's play")
     })
     
     // piano 이미지 움직이기
