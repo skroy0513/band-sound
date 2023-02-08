@@ -18,6 +18,7 @@
     4. 드래그 하는 동안 애니메이션 필요
    -->
   <h1>오디오 재생</h1>
+  <a href="./dropzone.html">드롭존으로 만든 것 보기</a>
   <div class="audio-file">
     <audio src="./audio/piano.wav" id="piano" loop></audio>
     <audio src="./audio/drum.wav" id="drum" loop></audio>
@@ -86,12 +87,15 @@
     const audios = document.querySelectorAll('audio');
     const stages = document.querySelectorAll('.stage');
     
-    // function Init(){
-    //   audios.forEach(audio => {
-    //     audio.volume = 0;
-    //   });
-    // }
-    // Init();
+    function Init(){
+      audios.forEach(audio => {
+        audio.volume = 0;
+      });
+    }
+    Init();
+    document.querySelector('body').addEventListener('mousedown', ()=>{
+      console.log(piano.currentTime, drum.currentTime)
+    })
     
     // 노래 재생되기
     $('.main').on('mousedown',function(){

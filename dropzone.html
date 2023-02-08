@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="shortcut icon" href="#">
+  <title>Document</title>
+  <style>
+    h1 {
+      display: block;
+      width: 400px;
+      margin: auto;
+      margin-top: 40px;
+    }
+    .stage {
+      margin: auto;
+      justify-content: center;
+      width: 1400px;
+      height: 300px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1%;
+      margin-bottom: 20px;
+      margin-top: 50px;
+    }
+    .wait {
+      margin: auto;
+      justify-content: center;
+      width: 1400px;
+      height: 300px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1%;
+      margin-bottom: 20px;
+      margin-top: 50px;
+    }
+    .piano-stage, .drum-stage, .bass-stage, .perc-stage, .pad-stage {
+      width: 250px;
+      height: 250px;
+    }
+    .piano-stage {
+      background-color: purple;
+    }
+    .drum-stage {
+      background-color: greenyellow;
+    }
+    .bass-stage {
+      background-color: aqua;
+    }
+    .perc-stage {
+      background-color: yellow;
+    }
+    .pad-stage {
+      background-color: royalblue;
+    }
+
+    .piano-wait, .drum-wait, .bass-wait, .perc-wait, .pad-wait {
+      width: 250px;
+      height: 250px;
+      border: 1px solid black;
+    }
+    .pinst {
+      width: 250px;
+      height: 250px;
+      background: url(./images/piano.png) center center no-repeat;
+      background-size: cover;
+    }
+    .dinst {
+      width: 250px;
+      height: 250px;
+      background: url(./images/drum.png) center center no-repeat;
+      background-size: contain;
+    }
+    .binst {
+      width: 250px;
+      height: 250px;
+      background: url(./images/bass.png) center center no-repeat;
+      background-size: 48%;
+    }
+    .pdinst {
+      width: 250px;
+      height: 250px;
+      background: url(./images/pad.png) center center no-repeat;
+      background-size: contain;
+    }
+    .pcinst {
+      width: 250px;
+      height: 250px;
+      background: url(./images/perc.png) center center no-repeat;
+      background-size: contain;
+    }
+    .piano-wait.active, .drum-wait.active, .bass-wait.active, .perc-wait.active, .pad-wait.active {
+      border: 3px solid red;
+    }
+    .piano-stage.active, .drum-stage.active, .bass-stage.active, .perc-stage.active, .pad-stage.active {
+      border: 3px solid red;
+    }
+  </style>
+</head>
+<body>
+  <h1>원하는 악기를 옮겨보세요!</h1>
+  <audio src="./audio/piano.wav" id="psound" loop></audio>
+  <audio src="./audio/drum.wav" id="dsound" loop></audio>
+  <audio src="./audio/bass.wav" id="bsound" loop></audio>
+  <audio src="./audio/pad.wav" id="pdsound" loop></audio>
+  <audio src="./audio/perc.wav" id="pcsound" loop></audio>
+  <div class="stage">
+    <div class="piano-stage"></div>
+    <div class="drum-stage"></div>
+    <div class="bass-stage"></div>
+    <div class="pad-stage"></div>
+    <div class="perc-stage"></div>
+  </div>
+  <div class="wait">
+    <div class="piano-wait active">
+      <div class="pinst" draggable="true" id="piano"></div>
+    </div>
+    <div class="drum-wait active">
+      <div class="dinst" draggable="true" id="drum"></div>
+    </div>
+    <div class="bass-wait active">
+      <div class="binst" draggable="true" id="bass"></div>
+    </div>
+    <div class="pad-wait active">
+      <div class="pdinst" draggable="true" id="pad"></div>
+    </div>
+    <div class="perc-wait active">
+      <div class="pcinst" draggable="true" id="perc"></div>
+    </div>
+  </div>
+  <a href="./index.html">초기버전 보기</a>
+
+
+  <script>
+    function Init(){
+      psound.volume = 0;
+      dsound.volume = 0;
+      bsound.volume = 0;
+      pdsound.volume = 0;
+      pcsound.volume = 0;
+    }
+    Init();
+    
+    // 노래 재생되기
+    document.querySelector('body').addEventListener('mousedown',function(){
+      psound.play()
+      dsound.play()
+      bsound.play()
+      pdsound.play()
+      pcsound.play()
+      console.log("let's play")
+    })
+    document.querySelector('body').addEventListener('mousedown', ()=>{
+      let time = psound.currentTime;
+      psound.currentTime = time;
+      dsound.currentTime = time;
+      bsound.currentTime = time;
+      pcsound.currentTime = time;
+      pdsound.currentTime = time;
+      console.log(psound.currentTime, dsound.currentTime, bsound.currentTime, pdsound.currentTime, pcsound.currentTime)
+    })
+    
+    const piano = document.getElementById('piano');
+    const pstage = document.querySelector('.piano-stage');
+    const pwait = document.querySelector('.piano-wait')
+    const drum = document.getElementById('drum');
+    const dstage = document.querySelector('.drum-stage');
+    const dwait = document.querySelector('.drum-wait')
+    const bass = document.getElementById('bass');
+    const bstage = document.querySelector('.bass-stage');
+    const bwait = document.querySelector('.bass-wait')
+    const pad = document.getElementById('pad');
+    const pdstage = document.querySelector('.pad-stage');
+    const pdwait = document.querySelector('.pad-wait')
+    const perc = document.getElementById('perc');
+    const pcstage = document.querySelector('.perc-stage');
+    const pcwait = document.querySelector('.perc-wait')
+  </script>
+  <script>
+    piano.addEventListener('dragstart', ()=>{
+      console.log('dragstart');
+      event.dataTransfer.setData('text', piano.id)
+      console.log(piano.id)
+    })
+    pstage.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pstage.addEventListener('drop', ()=>{
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('piano');
+      pstage.appendChild(appenditem);
+      psound.volume = 1;
+      pstage.classList.add('active');
+      pwait.classList.remove('active');
+    }) 
+    pwait.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pwait.addEventListener('drop', ()=>{
+      event.preventDefault();
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('piano');
+      pwait.appendChild(appenditem);
+      psound.volume = 0;
+      pstage.classList.remove('active');
+      pwait.classList.add('active');
+    })
+  </script>
+  <script>
+    drum.addEventListener('dragstart', ()=>{
+      console.log('dragstart');
+      event.dataTransfer.setData('text', drum.id)
+      console.log(drum.id)
+    })
+    dstage.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    dstage.addEventListener('drop', ()=>{
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('drum');
+      dstage.appendChild(appenditem);
+      dsound.volume = 1;
+      dstage.classList.add('active');
+      dwait.classList.remove('active');
+    })
+    dwait.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    dwait.addEventListener('drop', ()=>{
+      event.preventDefault();
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('drum');
+      dwait.appendChild(appenditem);
+      dsound.volume = 0;
+      dstage.classList.remove('active');
+      dwait.classList.add('active');
+    })
+  </script>
+  <script>
+    bass.addEventListener('dragstart', ()=>{
+      console.log('dragstart');
+      event.dataTransfer.setData('text', bass.id)
+      console.log(bass.id)
+    })
+    bstage.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    bstage.addEventListener('drop', ()=>{
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('bass');
+      bstage.appendChild(appenditem);
+      bsound.volume = 1;
+      bstage.classList.add('active');
+      bwait.classList.remove('active');
+    })
+    bwait.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    bwait.addEventListener('drop', ()=>{
+      event.preventDefault();
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('bass');
+      bwait.appendChild(appenditem);
+      bsound.volume = 0;
+      bstage.classList.remove('active');
+      bwait.classList.add('active');
+    })
+  </script>
+  <script>
+    pad.addEventListener('dragstart', ()=>{
+      console.log('dragstart');
+      event.dataTransfer.setData('text', pad.id)
+      console.log(pad.id)
+    })
+    pdstage.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pdstage.addEventListener('drop', ()=>{
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('pad');
+      pdstage.appendChild(appenditem);
+      pdsound.volume = 0.3;
+      pdstage.classList.add('active');
+      pdwait.classList.remove('active');
+    })
+    pdwait.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pdwait.addEventListener('drop', ()=>{
+      event.preventDefault();
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('pad');
+      pdwait.appendChild(appenditem);
+      pdsound.volume = 0;
+      pdstage.classList.remove('active');
+      pdwait.classList.add('active');
+    })
+  </script>
+  <script>
+    perc.addEventListener('dragstart', ()=>{
+      console.log('dragstart');
+      event.dataTransfer.setData('text', perc.id)
+      console.log(perc.id)
+    })
+    pcstage.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pcstage.addEventListener('drop', ()=>{
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('perc');
+      pcstage.appendChild(appenditem);
+      pcsound.volume = 0.3;
+      pcstage.classList.add('active');
+      pcwait.classList.remove('active');
+    })
+    pcwait.addEventListener('dragover', (event)=>{
+      event.preventDefault();
+    })
+    pcwait.addEventListener('drop', ()=>{
+      event.preventDefault();
+      const item = event.dataTransfer.getData('text');
+      console.log(item)
+      
+      const appenditem = document.getElementById('perc');
+      pcwait.appendChild(appenditem);
+      pcsound.volume = 0;
+      pcstage.classList.remove('active');
+      pcwait.classList.add('active');
+    })
+  </script>
+</body>
+</html>

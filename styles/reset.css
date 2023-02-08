@@ -1,21 +1,24 @@
-*{ 
-    margin:0; 
-    padding:0; 
+* {  
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    color: #333;
+    letter-spacing: -0.07em;
+    scroll-behavior: smooth;
 }
-
+   
 a{
     color:inherit;
     text-decoration: none;
 }
 
 li{ list-style-type: none;}
+
 body{ 
-    /* font지정 */
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
 }
 
 .flax-row-center{
-/* .f-ro-ce{ */
     display: flex;
     justify-content: center;
 }
